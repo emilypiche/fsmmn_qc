@@ -1,0 +1,67 @@
+﻿watershed,id,hpu,field_horizon,new_horizon,hzname,top,bottom,continues,thickenss,hue,value,chroma,munsell,field_txt,texture_class,structure,datalogger,note
+3,HBw3A,E,Oe,,Oe,0,5,,5,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19547,
+3,HBw3A,E,Oa,,Oa,5,9,,4,10YR,2,1,10YR 2/1,,organic,,z6-19547,
+3,HBw3A,E,E,,E,9,34,,25,7.5YR,4,2,7.5YR 4/2,FSL,fine sandy loam,2 M SBK,z6-19547,
+3,HBw3A,E,Bh/E,Bhs/E,Bhs/E,34,48,,14,7.5YR,2.5,2,7.5YR 2.5/2,FSL,fine sandy loam,2 M SBK,z6-19547,30%: 7.5YR 4/2
+3,HBw3A,E,Cd,,Cd,48,85,Y,,10YR,5,3,10YR 5/3,LS,loamy sand,MA,z6-19547,
+3,HBw3B,Bhs,Oi,,Oi,0,1,,1,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19520,
+3,HBw3B,Bhs,A,Oa?,Oa,1,5,,4,10YR,2,1,10YR 2/1,SL,sandy loam,2 M GR,z6-19520,mucky modifer
+3,HBw3B,Bhs,Bh,Oa?,Oa,5,41,,36,10YR,2,2,10YR 2/2,SL,sandy loam,2 M SBK,z6-19520,
+3,HBw3B,Bhs,Bhs,,Bhs,41,65,,24,7.5YR,2.5,2,7.5YR 2.5/2,SL,sandy loam,2 M SBK,z6-19520,
+3,HBw3B,Bhs,BC,,BC,65,82,,20,7.5YR,3,3,7.5YR 3/3,SL,sandy loam,1 M SBK,z6-19520,
+3,HBw3B,Bhs,C,,C,82,100,Y,,2.5YR,5,3,2.5YR 5/3,LS,loamy sand,MA,z6-19520,
+3,HBw3C,Typical,Oe,,Oe,0,4,,4,10YR,2,2,10YR 2/2,,organic,,z6-19526,
+3,HBw3C,Typical,A,Oa,Oa,4,12,,8,10YR,2,1,10YR 2/1,SL,sandy loam,2 M GR,z6-19526,mucky modifer
+3,HBw3C,Typical,E,,E,12,18,,6,10YR,4,1,10YR 4/1,SL,sandy loam,2 M SBK,z6-19526,
+3,HBw3C,Typical,Bhs,,Bhs,18,35,,17,7.5YR,2.5,2,7.5YR 2.5/2,SL,sandy loam,2 C SBK,z6-19526,
+3,HBw3C,Typical,Bh,,Bh,35,55,,20,10YR,3,3,10YR 3/3,SL,sandy loam,1 F SBK,z6-19526,
+3,HBw3C,Typical,Bhs,Bs?,Bs,55,100,,45,7.5YR,3,2,7.5YR 3/2,LS,loamy sand,2 M SBK,z6-19526,
+3,HBw3C,Typical,BC,,BC,100,120,,20,7.5YR,4,4,7.5YR 4/4,LS,loamy sand,,z6-19526,augered
+3,HBw3D,Bh,Oa,,Oa,0,5,,5,,,,,,organic,,z6-19516,near stream- riparian zone
+3,HBw3D,Bh,A,,A,5,21,,16,10YR,2,1,10YR 2/1,SL,sandy loam,2 M GR,z6-19516,pocket of E (13-21cm)
+3,HBw3D,Bh,Bh,,Bh,21,52,,31,7.5YR,2.5,2,7.5YR 2.5/2,SL,sandy loam,2 M SBK,z6-19516,pocket of E (13-21cm)
+3,HBw3D,Bh,C,,C,52,90,Y,,2.5YR,,3,2.5YR /3,SL,sandy loam,MA,z6-19516,
+6,HBw6A,E,O,,O,0,10,,10,7.5YR,2.5,1,7.5YR 2.5/1,,organic,,z6-19506,
+6,HBw6A,E,A,Oa,Oa,10,17,,7,10YR,2,1,10YR 2/1,SL,sandy loam,S M GR,z6-19507,mucky modifer
+6,HBw6A,E,E,,E,17,24,,7,10YR,4,2,10YR 4/2,SL,sandy loam,S C SBK,z6-19508,
+6,HBw6A,E,Bhs,,Bhs,24,30,,6,7.5YR,2.5,1,7.5YR 2.5/1,SL,sandy loam,S C SBK,z6-19509,
+6,HBw6B,Bhs,Oe,,Oe,0,6,,6,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19522,
+6,HBw6B,Bhs,Oa,,Oa,6,9,,3,10YR,2,1,10YR 2/1,,organic,,z6-19522,
+6,HBw6B,Bhs,Bhs1,,Bhs1,9,16,,7,7.5YR,3,1,7.5YR 3/1,FSL,fine sandy loam,1 M SBK,z6-19522,
+6,HBw6B,Bhs,Bhs2,,Bhs2,16,45,,29,7.5YR,3,2,7.5YR 3/2,FSL,fine sandy loam,1 M SBK,z6-19522,
+6,HBw6B,Bhs,BC,,BC,45,70,,25,7.5YR,4,3,7.5YR 4/3,SL,sandy loam,1 M SBK,z6-19522,20% 7.5 YR 3/3
+6,HBw6B,Bhs,Cd,,Cd,70,85,,15,2.5YR,5,3,2.5YR 5/3,LS,loamy sand,MA,z6-19522,
+6,HBw6C,Bhs,Oe,,Oe,0,4,,4,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19536,
+6,HBw6C,Bhs,Oa,,Oa,4,13,,9,10YR,2,1,10YR 2/1,,organic,,z6-19536,
+6,HBw6C,Bhs,Bhs,,Bhs,13,55,,42,7.5YR,3,2,7.5YR 3/2,SL,sandy loam,2 M SBK,z6-19536,
+6,HBw6C,Bhs,R,,R,55,60,Y,,,,,,,,,z6-19536,
+6,HBw6D,Bhs,Oi,,Oi,0,1,,1,,,,,,organic,,z6-19507,info on 2 separate sheets
+6,HBw6D,Bhs,Oe,,Oe,1,5,,4,7.5YR,3,2,7.5YR 3/2,,organic,,z6-19507,
+6,HBw6D,Bhs,Oa,,Oa,5,9,,4,10YR,2,1,10YR 2/1,,organic,,z6-19507,
+6,HBw6D,Bhs,E/Bhs,,E/Bhs,9,14,,5,7.5YR,4,1,7.5YR 4/1,SL,sandy loam,2 M SBK,z6-19507,
+6,HBw6D,Bhs,Bhs1,,Bhs1,14,42,,28,7.5YR,3,1,7.5YR 3/1,SL,sandy loam,2 C SBK,z6-19507,
+6,HBw6D,Bhs,Bhs2,,Bhs2,42,70,,28,7.5YR,4,1,7.5YR 4/1,SL,sandy loam,2 C SBK,z6-19507,
+6,HBw6D,Bhs,Cd,,Cd,70,80,Y,,2.5YR,5,3,2.5YR 5/3,LS,loamy sand,MA,z6-19507,water perched above
+9,HBw9A,E,Oe,,Oe,0,6,,6,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19523,
+9,HBw9A,E,Oa,,Oa,6,15,,9,10YR,2,1,10YR 2/1,,organic,,z6-19523,drawn picture in description sheet
+9,HBw9A,E,E1,,E1,15,35,,20,10YR,5,2,10YR 5/2,LS,loamy sand,2 M SBK,z6-19523,
+9,HBw9A,E,E2,,E2,35,58,,23,10YR,4,2,10YR 4/2,LS,loamy sand,MA,z6-19523,
+9,HBw9A,E,R,,R,58,63,Y,,,,,,,,,z6-19523,
+9,HBw9B,Bhs,Oe,,Oe,0,6,,6,7.5YR,3,2,7.5YR 3/2,,organic,,z6-19543,
+9,HBw9B,Bhs,Oa,,Oa,6,17,,11,10YR,2,1,10YR 2/1,,organic,,z6-19543,
+9,HBw9B,Bhs,Bhs1,,Bhs1,17,28,,11,5YR,3,3,5YR 3/3,FSL,fine sandy loam,2 M SNK,z6-19543,30%: 5YR 3/1
+9,HBw9B,Bhs,Bhs2,,Bhs2,28,53,,25,2.5YR,3,4,2.5YR 3/4,FSL,fine sandy loam,2 M SBK,z6-19543,40%: 2.5YR 3/2
+9,HBw9B,Bhs,Bhs3,,Bhs3,53,67,,14,5YR,3,3,5YR 3/3,FSL,fine sandy loam,2 C SBK,z6-19543,40%: 7.5YR 3/4
+9,HBw9B,Bhs,Cd,,Cd,67,95,,28,2.5Y ,5,3,2.5Y  5/3,LS,loamy sand,2 C PL,z6-19543,
+9,HBw9C,Typical,Oe,,Oe,0,9,,9,7.5YR,2.5,2,7.5YR 2.5/2,,organic,1 F GR,z6-19515,
+9,HBw9C,Typical,Oa,,Oa,9,17,,8,7.5YR,2.5,1,7.5YR 2.5/1,,organic,1 F GR,z6-19515,
+9,HBw9C,Typical,E,,E,17,23,,6,5Y,6,1,5Y 6/1,FSL,fine sandy loam,2 M SBK,z6-19515,
+9,HBw9C,Typical,Bs,,Bs,23,30,,7,7.5YR,3,4,7.5YR 3/4,FSL,fine sandy loam,2 F SBK,z6-19515,
+9,HBw9C,Typical,Bw,,Bw,30,54,,24,5Y,5,2,5Y 5/2,SL,sandy loam,2 M SBK,z6-19515,
+9,HBw9C,Typical,BC,,BC,54,80,,26,5Y,4,2,5Y 4/2,FSL,fine sandy loam,1 M ABK,z6-19515,
+9,HBw9D,Bh,Oe,,Oe,0,4,,4,7.5YR,2.5,2,7.5YR 2.5/2,,organic,,z6-19524,
+9,HBw9D,Bh,Oa,,Oa,4,7,,3,7.5YR,2.1,1,7.5YR 2.1/1,,organic,,z6-19524,
+9,HBw9D,Bh,A,Oa?,Oa,7,24,,17,10YR,2,1,10YR 2/1,FSL,fine sandy loam,2 M SBK,z6-19524,mucky modifer
+9,HBw9D,Bh,Bh,,Bh,24,45,,21,10YR,4,2,10YR 4/2,FSL,fine sandy loam,2 M SBK,z6-19524,
+9,HBw9D,Bh,BC1,,BC1,45,55,,10,2.5YR,4 or 5,3,2.5YR 4.5/3,FSL,fine sandy loam,2 M ABK,z6-19524,
+9,HBw9D,Bh,BC2,,BC2,55,87,,32,2.5YR,3,3,2.5YR 3/3,SL,sandy loam,2 M ABK,z6-19524,

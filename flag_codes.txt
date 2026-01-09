@@ -1,0 +1,39 @@
+
+QC Flag Codes
+
+t 
+**Time series – New rows were introduced where hourly ‘datetime’ observations were missing from the 1-hour interval data. Missing values across columns were populated with NA values, allowing the datetime column to represent a complete series of hours from the start of recording to the download time. These NA values were flagged as a time series insertion. 
+
+n
+**Missing value – Pre-existing NA entries within the raw dataset in sensor columns were flagged to distinguish these NAs from those introduced by filling missing time series observations.
+
+c
+**Matric potential sensor installation buffer - the first seven days of data collected by the matric potential sensors were cleared from the qc columns and flagged to ensure that sensors were fully equilibrated with surrounding soil.
+
+f
+**Temperature – Measurements made by a sensor reading a temperature below freezing (zero degrees celsius) were deemed invalid until the sensor temperature returned to above 0.25 degrees. This temperature buffer was added to capture values recorded when the temperature was fluctuating around zero. These values were replaced with NA in the qc column and flagged.  
+
+s
+**Record skipping – Values that were logged only intermittently by the logger under adequate battery conditions (> 5%) were flagged in order to identify potential sensor issues.
+
+r
+**Sensor range – Values that fell outside the  manufacturer's reported range of accuracy for each sensor were flagged.
+
+z
+**Zero EC – TEROS 12 sensor reports a value of 0 when soil electrical conductivity is below the detection limit, therefore EC values of 0 were replaced with NA in the qc column and flagged.
+
+l
+**Limited data - Fewer than 7 days total count of observations within a 30 day window
+
+p (or .)
+**Step + precipitation – In cases of high increase from one soil moisture value to the next (> 3SD from the mean step increase), local hourly precipitation data was used to validate the increase. If no precipitation occurred in the previous 12 hours, the point was flagged for user assessment (p). In cases where precipitation was not available, the test was marked as incomplete (.).
+
+X
+**Sensor Malfunction - Sensor was identified as malfunctioning. Either all points removed, or all points after a specified date are removed.
+
+I
+** Interpolated - Values in _qc column was derived by interpolating between nearest non-NA values. See associated log file for more information. 
+
+M
+** Manual selection - Points were manually selected for removal using the fsmmn shiny app
+

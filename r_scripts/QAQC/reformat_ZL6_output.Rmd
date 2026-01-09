@@ -1,0 +1,308 @@
+---
+title: "Reformat raw logger data"
+author: "Amanda Pennino + Emily Piche"
+date: "2023-11-14"
+output: html_document
+---
+
+Purpose of document:
+  - Reformat files downloaded from METER Group ZL6 loggers 
+  - Input is multi-tabbed .xlsx files, output is R compatible .csv files
+    
+Main steps:
+
+ Block 1 - 'Check for new logger uploads'
+  - User assigns forest name to 'forest' to specify the directory
+  - Script creates "reformatted" and "masters" folders if they do not exist
+  - Checks "raw" folder for new subfolders with dates that are not represented 
+    in the "reformatted" folder. If those exist, file names are loaded for reformatting
+    and user is alerted to which files will be reformatted
+  - Checks ZL6 logger serial number from loaded file names against ones represented 
+    in the "metadata" file. If serial numbers do not exist, user is alerted. 
+    
+ Block 2 - 'Reformat Raw Data'
+  - Loads data from 'processed data' tab with highest number
+  - Loads three line headers separately, uses metadata tab to get depths of 
+    sensors based on port assignment, and gives new names
+  - Saves .csv files to 'reformatted' folder - one .csv for every logger download
+  - Block contains hotfix to remove Bulk EC measurements downloaded at Fernow
+    instead of Saturation Extract EC
+  
+ Block 3 - 'Combine all download dates'
+  - Loads all files from 'reformatted' folder and appends files with the 
+    same location ID to the same dataframe
+  - Arranges by datetime and removes duplicate lines 
+  - Writes dataframe containing all download dates for each location to 
+    the 'masters' folder
+
+
+```{r Check for new logger uploads}
+
+# Set the forest name/directory to work within
+forest <- "HubbardBrook"
+
+# Packages ---------------------------------------------------------------------
+library(readxl)
+library(tidyverse)
+
+# set directories --------------------------------------------------------------
+dir <- paste0(dirname(dirname(dirname(rstudioapi::getActiveDocumentContext()$path))), "/", forest, "/sensor_data/") 
+
+raw_dir <- paste0(dir, "raw/") #Where raw files are in folders by download date
+reformatted_dir <- paste0(dir, "reformatted/") #reformatted files by download date
+master_dir <- paste0(dir, "master/") #reformatted files by location with all dates appended
+
+# if these are the first files processed for this forest, create the directories
+if (!dir.exists(reformatted_dir)) {dir.create(file.path(dir, "reformatted"))}
+if (!dir.exists(master_dir)) {dir.create(file.path(dir, "master"))}
+
+# get metadata 
+## columns needed: loggerID, site, depth_cm, duplicate_depth, serial 
+meta <- suppressMessages(read_csv(paste0(dirname(dir),"/sensor_metadata.csv")))
+
+# Determine which raw files need to be processed
+all_download_dates <- list.dirs(raw_dir, full.names = FALSE)[-1] 
+reformatted_dates <- list.files(reformatted_dir)
+new_raw_folder <- all_download_dates[!sapply(all_download_dates, function(x) any(grepl(x, reformatted_dates)))]
+new_raw_paths <- NULL
+
+for (i in 1:length(all_download_dates)) {
+  raw_files <- list.files(paste0(raw_dir, all_download_dates[i]), full.names = TRUE)
+  reformatted_files <- grep(all_download_dates[[i]], reformatted_dates, value = TRUE)
+  if(length(raw_files) > length(reformatted_files)) {
+    message(paste0("Raw file count does not match reformatted file count for ", all_download_dates[i], 
+                   ": ", length(raw_files), " raw, ", length(reformatted_files), " reformatted"))
+    # use metadata tab to match raw files to reformatted files, get raw files not in reformatted folder
+    logger_key <- meta %>% select(siteID, logger) %>% distinct
+    reformatted_loggers <- logger_key$logger[match(logger_key$siteID, sub("_.*", "", reformatted_files))]
+    raw_paths <- raw_files[!grepl(paste(reformatted_loggers, collapse = "|"), raw_files)]
+    new_raw_paths <- c(new_raw_paths, raw_paths)
+    # get logger serial # from new filename and make sure it is in the metadata
+    check_meta <- substr(basename(raw_files), 1, 8)
+    missing <- check_meta[!check_meta %in% meta$logger]
+    if(length(missing) > 0) { 
+      missingMessage <-paste0("Logger serial ", paste(missing, sep = ", "), " in ", all_download_dates[i], " not found in metadata sheet - check file!!")
+      print(missingMessage)
+      }
+    }
+}
+
+if (length(new_raw_folder) > 0) {
+  message(paste("\nFiles from ", new_raw_folder, "will be processed."))
+} else if (length(new_raw_paths) > 0) {
+  message(paste(length(new_raw_paths), "raw files missing from reformatted folder will be processed."))
+} else {
+  message("No new logger files found in raw folder - check if files need to be added.")
+  }
+
+
+```
+
+
+```{r Reformat Raw Data}
+
+## Make sure metadata file has download dates and serial numbers filled out
+
+  if(length(reformatted_dates) > 0 & (length(new_raw_folder) > 0 | length(new_raw_paths) > 0)) {
+  new_folder_paths <- NULL
+  if(length(new_raw_folder) > 0) {list.files(path = paste0(raw_dir, new_raw_folder), 
+                                             full.names = TRUE, recursive = TRUE)}
+  file_list <- c(new_folder_paths, new_raw_paths)
+} else if(length(reformatted_dates) == 0) {
+  file_list <- list.files(path = raw_dir, full.names = TRUE, recursive = TRUE)
+} else {
+  file_list <- NULL
+  message("No new logger files found in raw folder - check if files need to be added.")
+}
+
+if(!length(file_list) > 0 | is.null(file_list)) {
+  message("No files loaded.")
+} else {
+
+    # if its not a *new* file, get logger serial # from filename and make sure it is in the metadata
+    check_meta <- substr(basename(raw_files), 1, 8)
+    missing <- check_meta[!check_meta %in% meta$logger]
+    if(length(missing) > 0) { 
+      missingMessage <-paste0("*****\nLogger serial(s) ", paste(missing, sep = ", "), " not found in metadata sheet - check file!!\n\n*****")
+      stop(missingMessage)
+    }
+    
+  message(paste(length(file_list), "files loaded successfully."))
+  message("Beginning to restructure files found in raw directory -- ")
+  
+  for(file in file_list) {
+
+    
+    #Read in the 'raw' data (tab with 'processed data' and highest number)
+    dat <- suppressMessages(read_excel(file, col_names = FALSE, skip = 3, na = c("", "NA")))
+    # replace xlsx error cells with NA
+    cells <- tidyxl::xlsx_cells(file)
+    cells_data <- cells[cells$row > 3, ]
+    cells_data <- cells_data %>% mutate(sheetNo = sub(".*(.)$", "\\1", sheet)) %>%
+      filter(grepl("Processed", sheet)) %>%
+      slice_max(as.numeric(sheetNo), n = 1)
+    error_cells <- subset(cells_data, !is.na(formula) & formula == "#N/A" & col != 1)
+    num_mat <- as.matrix(dat[,-1])
+    row_idx <- error_cells$row -3
+    col_idx <- error_cells$col -1
+    valid <- row_idx >= 1 & row_idx <= nrow(num_mat) & col_idx >= 1 & col_idx <= ncol(num_mat)
+    row_idx <- row_idx[valid]
+    col_idx <- col_idx[valid]
+    if (length(row_idx) > 0) {
+      num_mat[cbind(row_idx, col_idx)] <- NA
+    }
+    dat[,-1] <- num_mat
+    
+    # read in sensor metadata and header info
+    log <- suppressMessages(read_excel(file, col_names = FALSE, sheet = "Metadata"))
+    header <- suppressMessages(read_excel(file, col_names = FALSE))
+    
+    if(!exists("log")) {
+      print(paste("Warning: File", str_extract(file, "[^/]+$"), "in raw directory", 
+                    "does not contain a 'Metadata' sheet."))}
+    
+    # New version is dynamic to whatever column contains "Device Name"
+    # in case of irregularities in file structure
+    dev_col <- which(sapply(log, function(x) any(grepl("Device Name", x))))
+    dev_col_name <- names(dev_col)
+    
+    # get logger ID 
+    loggerID <- subset(log, log[[dev_col]] == "Device Name") %>% pull(dev_col+1) 
+    
+    # get date and format download date string
+    date <- subset(log, log[[dev_col]] == "Logger Time") %>% 
+      pull(dev_col +1) %>% as.Date("%m/%d/%y")
+    mo <- as.character(lubridate::month(date, label = TRUE, abbr = TRUE))
+    yr <- as.character(lubridate::year(as.POSIXlt(date, format="%d/%m/%Y")))
+    download_date = paste0(mo, yr)
+    
+    # get port numbers, names, and serial numbers
+    row <- as.numeric(which(grepl("Sensors", log[[dev_col-1]]))) 
+    
+    if(is.null(row) | is.na(row)) {
+      message(paste("Warning: File", str_extract(file, "[^/]+$"), 
+                    "contains Metadata sheet incompatible with processing code."))}
+    
+    col_keep <- c(dev_col_name, names(log)[dev_col+1])
+    log <- log %>% 
+      dplyr::slice(row:nrow(log)) %>%
+      filter(.[[dev_col]] %in% c("Port #", "Name", "Serial Num", "Serial Number")) %>%
+      select(all_of(col_keep))
+    
+    # aggregate and reformat dataframe
+    names(log) <- c("key", "value")
+    log[is.na(log)] <- "9999"
+    log <- do.call(data.frame, aggregate(. ~ key, log, as.vector))
+    log <- as.data.frame(t(log[,-1]))
+    names(log) <- c("name", "port", "serial")
+    log$port <- as.numeric(log$port)
+    if("9999" %in% log$serial) {
+      message(paste("Warning: File", str_extract(file, "[^/]+$"), 
+                    "missing sensor serial numbers in Metadata sheet."))}
+    
+    # separate model ID from full device name
+    log$model <- word(log$name, start = 1, end = 2)
+    
+    # add measurement types for each model (this also resets row names)
+    log <- log %>%
+      mutate(meas = if_else(model == "TEROS 21", 
+                            list(c("matric_kPa", "matric_temp_C")), 
+                            list(c("vwc", "vwc_temp_C", "satext_mScm", "bulkEC_mScm")))) %>%
+      unnest(meas) 
+    
+    #Headers of the file -------------------------------------------------------
+    header <- header[c(1:3),]
+    header <- as.data.frame(t(header))
+    names(header) <- c("port", "model", "meas")
+    
+    #unique(header$meas) - swap out strings for r compatible col names
+    header$meas <- ifelse(header$meas == "Timestamp", "datetime", header$meas)
+    header$meas <- ifelse(header$meas == "kPa Matric Potential", "matric_kPa", header$meas)
+    header$meas <- ifelse(header$meas == "°C Soil Temperature" & header$model == "TEROS 12", "vwc_temp_C", header$meas)
+    header$meas <- ifelse(header$meas == "°C Soil Temperature" & header$model == "TEROS 21", "matric_temp_C", header$meas)
+    header$meas <- ifelse(header$meas == "°C Soil Temperature" & header$model == "TEROS 11", "vwc_temp_C", header$meas)
+    header$meas <- ifelse(header$meas == "m³/m³ Water Content", "vwc", header$meas)
+    header$meas <- ifelse(header$meas == "mS/cm Saturation Extract EC", "satext_mScm", header$meas)
+    header$meas <- ifelse(header$meas == "mS/cm Bulk EC", "bulkEC_mScm", header$meas)
+    header$meas <- ifelse(header$meas == "% Battery Percent",  paste0("logger", "_", "battPerc"), header$meas)
+    header$meas <- ifelse(header$meas == "mV Battery Voltage",  paste0("logger", "_", "battVolt"), header$meas)
+    header$meas <- ifelse(header$meas == "kPa Reference Pressure",  paste0("logger", "_", "refPress"), header$meas)
+    header$meas <- ifelse(header$meas == "°C Logger Temperature",  paste0("logger", "_", "tempC"), header$meas)
+    
+    #join metadata with log to get depths of the sensors
+    metaL <- meta %>% filter(logger == loggerID)
+    
+    #Site id
+    site <- as.character(na.omit(unique(metaL$siteID)))
+    my_cols <- c("depth_cm", "duplicate_depth")
+    metaL$dup_depth <- do.call(paste, c(metaL[my_cols], sep = ""))
+    metaL <- metaL %>% select(siteID, logger, serial, dup_depth) 
+    
+    log <- left_join(log, metaL, by = "serial")
+    
+    #port
+    header$port <- as.numeric(str_extract(header$port, "\\d"))
+    header$port <- ifelse(header$meas == "datetime", NA, header$port)
+    
+    #join log with header information
+    header <- left_join(header, log, by = c("port", "meas"))
+    
+    my_cols <- c("meas", "dup_depth")
+    header$colnames <- do.call(paste, c(header[my_cols], sep = "_"))
+    header$colnames <- gsub("_NA", "",header$colname)
+    header$colnames <- gsub("NA", "",header$colname)  
+    
+    #Change the column names and write out
+    colnames <- header$colnames
+    names(dat) <- c(colnames)
+    
+    #Ensure dates are written to CSV correctly
+    dat$datetime <- format(dat$datetime, "%Y-%m-%d %H:%M:%S")
+    
+    # remove Bulk EC, accidentally downloaded at Fernow
+    dat <- dat[, !grepl("bulk", names(dat))]
+    
+    #Write to csv
+    write.csv(dat, paste0(reformatted_dir, site, "_", download_date, ".csv"), row.names = FALSE)
+    message(paste("Processed file: ", file))
+  }
+  message("Raw file restructuring complete! Files saved to 'reformatted' folder.") 
+}
+
+
+```
+
+
+
+```{r Combine all download dates}
+
+file_prefix <- unique(sapply(list.files(path=reformatted_dir, 
+                                        recursive = TRUE, 
+                                        full.names = FALSE, 
+                                        pattern = "*.csv"), substr, 1, 5))
+
+file_prefix <- as.character(strsplit(file_prefix,"_")) 
+ 
+# NAMED LIST OF ROW-BINDED DATAFRAMES
+dfList <- sapply(file_prefix, function(p){
+  matches <- list.files(path=reformatted_dir, 
+                        pattern=p, 
+                        full.names=TRUE)
+  dfs <- lapply(rev(matches), read.csv) # rev here maintains column order due to an issue downloading satext in fernow in 2025
+  as.data.frame(data.table::rbindlist(dfs, fill = TRUE))
+}, simplify=FALSE)
+
+#remove duplicate rows, if whole downloads were made multiple times
+dfList <- lapply(dfList, function(x) x[!duplicated(x["datetime"]), ])
+
+## remove erroneous date values by filtering out dates past today
+dfList <- lapply(dfList, function(df) df[df$datetime <= Sys.Date(),])
+
+# save a csv for each logger in the master folder
+for(i in 1:length(dfList)){
+  dfList[[i]] <- dfList[[i]][order(dfList[[i]]$datetime),]
+  write.csv(dfList[[i]], paste0(master_dir, names(dfList)[i], ".csv"), row.names = FALSE)
+}
+
+```
+
