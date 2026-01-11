@@ -31,9 +31,3 @@ p (or .)
 X
 **Sensor Malfunction - Sensor was identified as malfunctioning. Either all points removed, or all points after a specified date are removed.
 
-I
-** Interpolated - Values in _qc column was derived by interpolating between nearest non-NA values. See associated log file for more information. 
-
-M
-** Manual selection - Points were manually selected for removal using the fsmmn shiny app
-
