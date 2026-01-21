@@ -8,7 +8,7 @@ This repository contains files for applying quality control (QC) procedures deve
 
 A folder named `HubbardBrook` contains: 
 * `sensor_data/raw` folder (raw sensor measurements downloaded from the datalogger)
-* `precip` folder (data from doi.org/10.6073/pasta/e79bc39b1bb83b5c2bb17e2925d9c83b)
+* `precip` folder (USDA Forest Service, Northern Research Station, 2025)
 * `shapefiles` folder (instrumented watershed boundaries)
 * `sensor_metadata.csv` (sensor metadata)
 * `pedons.csv` (soil profile descriptions)
@@ -39,9 +39,12 @@ The code must be executed in the following order:
 
 
 * CONTACT *
+
 Emily Piche (epiche@esf.edu)
 Amanda Pennino (apennino@esf.edu)
 
 
+* Hubbard Brook Precipitation Data Retrieved from:  * 
 
+USDA Forest Service, Northern Research Station. 2025. Hubbard Brook Experimental Forest: 15-minute Precipitation Measurements, 2011 - present ver 10. Environmental Data Initiative. https://doi.org/10.6073/pasta/e79bc39b1bb83b5c2bb17e2925d9c83b
 
